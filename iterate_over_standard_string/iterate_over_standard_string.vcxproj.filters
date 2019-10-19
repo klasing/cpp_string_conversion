@@ -23,7 +23,7 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="iterate_over_standard_string.cpp">
+    <ClCompile Include="examples.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
