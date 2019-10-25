@@ -2,10 +2,13 @@
 //
 
 #include "pch.h"
+#include <locale>
+#include <codecvt>
+#include <sstream>
 
 int main()
 {
-	std::cout << "Example 1: Iterate over std::string\n";
+	std::cout << "EXAMPLE 1: Iterate over std::string\n";
 	std::string alphabet = "abcdefghijklmnopqrstuvwxyz";
 
 	std::cout << "1) range-based for loop\n";
@@ -40,7 +43,7 @@ int main()
 	});
 	std::cout << std::endl;
 
-	std::cout << "Example 2: std::string to PWCHAR (via a wchar_t*)\n";
+	std::cout << "EXAMPLE 2: std::string to PWCHAR (via a wchar_t*)\n";
 	std::cout << "A) convert to a std::wstring\n";
 	std::wstring wAlphabet = std::wstring(alphabet.begin(), alphabet.end());
 	std::cout << "B) assign the std::wstring to a wchar_t*,  which is PWCHAR in WIN-32\n";
@@ -71,6 +74,36 @@ int main()
 	//std::wcout << wcstr << std::endl;
 	pszAlphabet = wcstr;
 	std::wcout << pszAlphabet << std::endl;
+
+	{
+		std::cout << "EXAMPLE 4: PWCHAR to std::string\n";
+		PWCHAR pwchar = (PWCHAR)L"abcdefghijklmnopqrstuvwxyz";
+		std::wstring wstr(pwchar);
+		typedef std::codecvt_utf8<wchar_t> ccvt;
+		std::wstring_convert<ccvt> owstring_convert;
+		std::string str = owstring_convert.to_bytes(wstr);
+	}
+
+	// a good article about string stuff, found at:
+	// https://stackoverflow.com/questions/4804298/how-to-convert-wstring-into-string
+	{
+		std::cout << "EXAMPLE 5: using std::wstringstream\n";
+		std::wstringstream ws_stream;
+		char pch[] = { 'c', 'h', 'a', 'r', '*', '\0' };
+		std::string str("narrow string");
+		std::wstring wstr = L"wide string";
+		wchar_t wch[] = {L'w', L'c', L'h' , L'a' , L'r' , L'_', L't', '\0' };
+		PWCHAR pwchar = (PWCHAR)L"PWCHAR";
+		ws_stream << pch << '\n'
+			<< str.c_str() << '\n'
+			<< wstr << '\n'
+			<< wch << '\n'
+			<< pch << '\n'
+			<< pwchar << '\n';
+		std::wstring all = ws_stream.str();
+		std::wcout << all;
+	}
+
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
