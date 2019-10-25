@@ -89,6 +89,7 @@ int main()
 	{
 		std::cout << "EXAMPLE 5: using std::wstringstream\n";
 		std::wstringstream ws_stream;
+		// callback function for the wstringstream
 		auto callback_lambda = [](std::ios::event ev
 			, std::ios_base& obj
 			, int index) {
@@ -110,7 +111,10 @@ int main()
 				break;
 			} // eof switch
 		};
+		// registering the callback function
 		ws_stream.register_callback(callback_lambda, 0);
+		// triggering an imnue_event, and then showing the locale
+		// used by the wstringstream
 		ws_stream.imbue(std::cout.getloc());
 
 		char pch[] = { 'c', 'h', 'a', 'r', '*', '\0' };
