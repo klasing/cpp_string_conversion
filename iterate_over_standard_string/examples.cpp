@@ -89,6 +89,30 @@ int main()
 	{
 		std::cout << "EXAMPLE 5: using std::wstringstream\n";
 		std::wstringstream ws_stream;
+		auto callback_lambda = [](std::ios::event ev
+			, std::ios_base& obj
+			, int index) {
+			std::cout << "callback: ";
+			switch (ev)
+			{
+			case obj.copyfmt_event:
+				std::cout << "copyfmt_event\n";
+				break;
+			case obj.imbue_event:
+			{
+				std::locale loc = obj.getloc();
+				std::cout << "imbue_event, locale name: "
+					<< loc.name() << "\n";
+				break;
+			} // eof obj.imbue_event
+			case obj.erase_event:
+				std::cout << "erase_event\n";
+				break;
+			} // eof switch
+		};
+		ws_stream.register_callback(callback_lambda, 0);
+		ws_stream.imbue(std::cout.getloc());
+
 		char pch[] = { 'c', 'h', 'a', 'r', '*', '\0' };
 		std::string str("narrow string");
 		std::wstring wstr = L"wide string";
@@ -103,7 +127,6 @@ int main()
 		std::wstring all = ws_stream.str();
 		std::wcout << all;
 	}
-
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
